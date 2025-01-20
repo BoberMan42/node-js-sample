@@ -13,16 +13,18 @@ jobs:
           name: Install dependencies
           command: npm install
 
+      # Construire l'image Docker
       - run:
           name: Build Docker image
           command: docker build -t my-node-app .
-	
+
+      # Pousser l'image Docker sur le registre
       - run:
           name: Push Docker image
           command: |
-             docker login -u $DOCKER_USER -p $DOCKER_PASS
-             docker tag my-node-app $DOCKER_USER/my-node-app:latest
-             docker push $DOCKER_USER/my-node-app:latest
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+            docker tag my-node-app $DOCKER_USER/my-node-app:latest
+            docker push $DOCKER_USER/my-node-app:latest
 
 workflows:
   version: 2
